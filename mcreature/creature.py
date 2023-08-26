@@ -43,7 +43,6 @@ class Creature:
     def move(self):
         # 크리쳐 움직이기 (순수 가상 함수)
         self.rect.topleft = (self.x, self.y)
-        pygame.display.update()
 
     def update(self):
         # 움직이고 점프를 같이 함

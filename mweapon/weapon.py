@@ -62,7 +62,7 @@ class Weapon:
             self.x = parents_creature.x + self.width
         self.y = parents_creature.y - self.height / 5
         self.rect.topleft = (self.x, self.y)
-        pygame.display.update()
+        
 
     def update(self, parent_player):
         # 무기 업데이트

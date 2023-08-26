@@ -14,7 +14,6 @@ class Robot(Creature):
         self.y = p1.y
 
         self.rect.topleft = (self.x, self.y)
-        pygame.display.update()
 
     # 로봇 업데이트
     def update(self, p1):

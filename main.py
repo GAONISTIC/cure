@@ -76,7 +76,7 @@ nam.add_element(natemp)
 while ms.running:
     mf.is_QUIT()
 
-    game_screen.screen_fill(ms.screen)
+    game_screen.screen_fill_bg(ms.screen)
     
     pm.update_element(game_screen)
     pm.draw_element(ms.screen)

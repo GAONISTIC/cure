@@ -77,7 +77,6 @@ class Player(Creature):
 
         # 위치 조정
         self.rect.topleft = (self.x, self.y)
-        pygame.display.update()
 
     # 플레이어 업데이트
     def update(self, game_screen):
