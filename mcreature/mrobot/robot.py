@@ -1,3 +1,5 @@
+# 로봇 클래스
+
 from mcreature.creature import Creature
 import assets.functions as af
 import pygame
@@ -14,5 +16,7 @@ class Robot(Creature):
         self.rect.topleft = (self.x, self.y)
         pygame.display.update()
 
+    # 로봇 업데이트
     def update(self, p1):
         self.move(p1)
+        # 점프는 굳이 확인할 필요가 없다

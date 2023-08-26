@@ -1,3 +1,5 @@
+# 플레이어 공격 함수 모음
+
 def B1_ATTACK():
     print("B1_ATTACK")
 

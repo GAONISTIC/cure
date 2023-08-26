@@ -1,3 +1,5 @@
+# 플레이어 조작 키 모음 열거형
+
 from enum import Enum
 import pygame
 

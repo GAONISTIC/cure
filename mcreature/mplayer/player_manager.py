@@ -1,18 +1,22 @@
+# 플레이어 관리 클래스
+
 from mcreature.creature_manager import CreatureManager
 
+# 플레이어 메니저는 크리쳐 메니저와 하는 일이 같다
 class PlayerManager(CreatureManager):
     def __init__(self):
         super().__init__()
 
-    def add_player(self, addCreature):
-        super().add_creature(addCreature)
+    def add_element(self, addCreature):
+        super().add_element(addCreature)
 
-    def list_player(self):
-        super().list_creature()
+    def list_element(self):
+        super().list_element()
 
-    def draw_player(self, screen):
-        super().draw_creature(screen)
+    def draw_element(self, screen):
+        super().draw_element(screen)
 
-    def update_player(self, game_screen):
+    def update_element(self, game_screen):
         for indexPlayer in self.creatures:
+            # game_screen을 넣는 이유: 깨어진 세계 이동을 짜야 하기 때문
             indexPlayer.update(game_screen)

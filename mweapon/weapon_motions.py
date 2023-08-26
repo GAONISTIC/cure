@@ -1,3 +1,5 @@
+# 무기 움직임 관련 함수 모음
+
 import mgame_manager.settings as ms
 
 def B1ATTACK_motion(current_weapon):

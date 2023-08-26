@@ -12,6 +12,9 @@ from mcreature.mrobot.robot import Robot
 from mcreature.mcreature_items.mcreature_health_bar.creature_health_bar_manager import CreatureHealthBarManager
 from mcreature.mcreature_items.mcreature_health_bar.creature_health_bar import CreatureHealthBar
 
+from mcreature.mcreature_items.mcreature_name_bar.mcreature_name_bar import CreatureNameBar
+from mcreature.mcreature_items.mcreature_name_bar.mcreature_name_bar_manager import CreatureNameBarManager
+
 from mweapon.weapon import Weapon
 from mweapon.weapon_manager import WeaponManager
 
@@ -54,31 +57,37 @@ rtemp = Robot(
     jumpSize=3
 )
 
-hitemp = CreatureHealthBar(temp, 100, 40)
+hitemp = CreatureHealthBar(temp)
+natemp = CreatureNameBar(rtemp)
 
 pm = PlayerManager()
-pm.add_player(temp)
+pm.add_element(temp)
 rm = RobotManager()
-rm.add_robot(rtemp)
+rm.add_element(rtemp)
 wm = WeaponManager()
-wm.add_weapon(wtemp)
+wm.add_element(wtemp)
 game_screen = Screen()
 him = CreatureHealthBarManager()
-him.add_healthBar(hitemp)
+him.add_element(hitemp)
+nam = CreatureNameBarManager()
+nam.add_element(natemp)
+
 
 while ms.running:
     mf.is_QUIT()
 
     game_screen.screen_fill(ms.screen)
     
-    pm.update_player(game_screen)
-    pm.draw_player(ms.screen)
-    wm.update_weapon(temp)
-    wm.draw_weapon(ms.screen)
-    rm.update_robot(temp)
-    rm.draw_robot(ms.screen)
-    him.update_healthBar()
-    him.draw_healthBar(ms.screen)
+    pm.update_element(game_screen)
+    pm.draw_element(ms.screen)
+    wm.update_element(temp)
+    wm.draw_element(ms.screen)
+    rm.update_element(temp)
+    rm.draw_element(ms.screen)
+    him.update_element()
+    him.draw_element(ms.screen)
+    nam.update_element()
+    nam.draw_element(ms.screen)
 
     mf.update(ms.screen)
 
