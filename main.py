@@ -15,6 +15,8 @@ from mcreature.mcreature_items.mcreature_health_bar.creature_health_bar import C
 from mcreature.mcreature_items.mcreature_name_bar.mcreature_name_bar import CreatureNameBar
 from mcreature.mcreature_items.mcreature_name_bar.mcreature_name_bar_manager import CreatureNameBarManager
 
+from mcreature.mcreature_items.mcreature_attack_icon.mcreature_attack_icon import CreatureAttackIcon
+
 from mweapon.weapon import Weapon
 from mweapon.weapon_manager import WeaponManager
 
@@ -41,7 +43,8 @@ wtemp = Weapon(
     width=50,
     height=50,
     x=100,
-    y=100
+    y=100,
+    player = temp,
 )
 
 rtemp = Robot(
@@ -59,6 +62,8 @@ rtemp = Robot(
 
 hitemp = CreatureHealthBar(temp)
 natemp = CreatureNameBar(rtemp)
+
+aitemp = CreatureAttackIcon("b1", temp)
 
 pm = PlayerManager()
 pm.add_element(temp)
@@ -78,6 +83,7 @@ while ms.running:
 
     game_screen.screen_fill_bg(ms.screen)
     
+    aitemp.draw(ms.screen)
     pm.update_element(game_screen)
     pm.draw_element(ms.screen)
     wm.update_element(temp)

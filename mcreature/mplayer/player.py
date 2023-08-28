@@ -15,6 +15,11 @@ class Player(Creature):
         # 속성
         self.playerType = playerType
 
+        # 딜레이 관련
+        self.b1_delay_frame = 100
+        self.b1_later_frame = 0
+        self.b1_is_attacking = False
+
     def move(self, game_screen):
         keys = pygame.key.get_pressed()
 
@@ -48,7 +53,10 @@ class Player(Creature):
 
         # B1 공격(Basic 1)
         if keys[PlayerKey.ATT_B1.value]:
-            pattack.B1_ATTACK()
+            if self.b1_is_attacking == False:
+                self.b1_is_attacking = True
+                self.b1_later_frame = 0
+                pattack.B1_ATTACK()
 
         # B2 공격(Basic 2)
         if keys[PlayerKey.ATT_B2.value]:
@@ -77,6 +85,12 @@ class Player(Creature):
 
         # 위치 조정
         self.rect.topleft = (self.x, self.y)
+
+        if self.b1_is_attacking == True:
+            self.b1_later_frame += 1
+
+        if self.b1_later_frame > self.b1_delay_frame:
+            self.b1_is_attacking = False
 
     # 플레이어 업데이트
     def update(self, game_screen):

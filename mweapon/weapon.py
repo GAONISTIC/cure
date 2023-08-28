@@ -6,7 +6,7 @@ from mweapon.weapon_keys import WeaponKey
 import mweapon.weapon_motions as wmotion
 
 class Weapon:
-    def __init__(self, name, power, width, height, x, y):
+    def __init__(self, name, power, width, height, x, y, player):
         # 기본적인 변수 설정
         self.name = name
         self.power = power
@@ -26,6 +26,12 @@ class Weapon:
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
 
+        # 플레이어 설정
+        self.player = player
+
+        # 공격 딜레이에 따른 모션 딜레이 설정(한 번만 모션이 나오게)
+        self.is_motioning = False # False일때 True로 바꾸고 한 번만 실행. 공격이 끝나면 다시 False로
+
     def draw(self, screen):
         # 무기 그리기
         screen.blit(self.image, self.rect.topleft)
@@ -36,8 +42,13 @@ class Weapon:
 
         # B1 공격
         if keys[WeaponKey.ATT_B1.value]:
-            print("B1ATTACK WITH WEAPON")
-            wmotion.B1ATTACK_motion(self)
+            # print("B1ATTACK WITH WEAPON")
+
+            # 공격이 시작할 때 딱 한 번만 모션이 취해지게
+            if self.player.b1_is_attacking and self.is_motioning == False:
+                wmotion.B1ATTACK_motion(self)
+                # 다시 모션이 나오지 않게 True로 
+                self.is_motioning = True
             
         # B2 공격
         if keys[WeaponKey.ATT_B2.value]:
@@ -62,6 +73,10 @@ class Weapon:
             self.x = parents_creature.x + self.width
         self.y = parents_creature.y - self.height / 5
         self.rect.topleft = (self.x, self.y)
+
+        # 공격이 끝나면 다시 False로 바꿔서 모션을 다시 취할 수 있게
+        if self.player.b1_is_attacking == False:
+            self.is_motioning = False
         
 
     def update(self, parent_player):
