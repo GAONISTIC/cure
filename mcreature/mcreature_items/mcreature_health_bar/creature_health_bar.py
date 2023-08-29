@@ -50,6 +50,7 @@ class CreatureHealthBar:
         self.x = self.mother_creature.x
         self.y = self.mother_creature.y - self.mother_creature.height / 3
         self.rect.topleft = (self.x, self.y)
+        self.now_health = self.mother_creature.health
 
         # 체력 업데이트
         self.set_percent_health()

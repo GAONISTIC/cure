@@ -23,3 +23,5 @@ frame_count = 0 # 프레임 세기
 
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((screen_width, screen_height)) # 중요
+
+monster_num = 0 # 몹의 개수 저장

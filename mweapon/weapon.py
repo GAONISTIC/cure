@@ -4,20 +4,23 @@ import pygame
 import assets.functions as af
 from mweapon.weapon_keys import WeaponKey
 import mweapon.weapon_motions as wmotion
+from mweapon.weapon_attack import *
 
 class Weapon:
-    def __init__(self, name, power, width, height, x, y, player):
+    def __init__(self, name, power, width, height, x, y, player, mother_creature):
         # 기본적인 변수 설정
         self.name = name
-        self.power = power
         self.width = width
         self.height = height
         self.x = x
         self.y = y
 
+        self.mother_creature = mother_creature
+        self.power = self.mother_creature.power
+
         # 공격 모션 설정
         self.start_attack_frame = 0
-        self.delay_attack_frame = 5
+        self.delay_attack_frame = 50
         self.is_attacking = False
 
         # 기본 이미지 설정
@@ -32,11 +35,14 @@ class Weapon:
         # 공격 딜레이에 따른 모션 딜레이 설정(한 번만 모션이 나오게)
         self.is_motioning = False # False일때 True로 바꾸고 한 번만 실행. 공격이 끝나면 다시 False로
 
+        # 너 내 동료가 되라 (로봇 피격상태 저장)
+        self.save_attacked_robot = []
+
     def draw(self, screen):
         # 무기 그리기
         screen.blit(self.image, self.rect.topleft)
 
-    def move(self, parents_creature):
+    def move(self, parents_creature, robot_manager):
         # 무기 움직임
         keys = pygame.key.get_pressed()
 
@@ -69,6 +75,7 @@ class Weapon:
         # 움직임 관리
         wmotion.checking_motion(self)
 
+        # 원래 위치로 가기
         if self.is_attacking == False:
             self.x = parents_creature.x + self.width
         self.y = parents_creature.y - self.height / 5
@@ -77,8 +84,10 @@ class Weapon:
         # 공격이 끝나면 다시 False로 바꿔서 모션을 다시 취할 수 있게
         if self.player.b1_is_attacking == False:
             self.is_motioning = False
-        
+            self.save_attacked_robot = []
 
-    def update(self, parent_player):
+        is_robot_attacked(self, robot_manager)
+
+    def update(self, parent_player, robot_manager):
         # 무기 업데이트
-        self.move(parent_player)
+        self.move(parent_player, robot_manager)

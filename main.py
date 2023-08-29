@@ -26,7 +26,7 @@ mf.start_game()
 temp = Player(
     name="aa",
     health=100,
-    power=100,
+    power=10,
     defense=100,
     speed=8,
     width=100,
@@ -36,6 +36,7 @@ temp = Player(
     jumpSize=100,
     playerType="gravity"
 )
+ms.monster_num += 1
 
 wtemp = Weapon(
     name="bb",
@@ -45,7 +46,9 @@ wtemp = Weapon(
     x=100,
     y=100,
     player = temp,
+    mother_creature=temp,
 )
+ms.monster_num += 1
 
 rtemp = Robot(
     name="cc",
@@ -59,8 +62,10 @@ rtemp = Robot(
     y=270,
     jumpSize=3
 )
+ms.monster_num += 1
 
 hitemp = CreatureHealthBar(temp)
+rhitemp = CreatureHealthBar(rtemp)
 natemp = CreatureNameBar(rtemp)
 
 aitemp = CreatureAttackIcon("b1", temp)
@@ -74,9 +79,9 @@ wm.add_element(wtemp)
 game_screen = Screen()
 him = CreatureHealthBarManager()
 him.add_element(hitemp)
+him.add_element(rhitemp)
 nam = CreatureNameBarManager()
 nam.add_element(natemp)
-
 
 while ms.running:
     mf.is_QUIT()
@@ -86,7 +91,7 @@ while ms.running:
     aitemp.draw(ms.screen)
     pm.update_element(game_screen)
     pm.draw_element(ms.screen)
-    wm.update_element(temp)
+    wm.update_element(temp, rm)
     wm.draw_element(ms.screen)
     rm.update_element(temp)
     rm.draw_element(ms.screen)

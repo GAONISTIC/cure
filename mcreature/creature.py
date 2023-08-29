@@ -3,6 +3,8 @@
 import pygame
 import mcreature.creature_move as cmove
 import mcreature.creature_attack as cattack
+import mcreature.creature_condition as cc
+from mgame_manager.settings import monster_num
 
 class Creature:
     def __init__(self, name, health, power, defense, speed, width, height, x, y, jumpSize, filepath):
@@ -36,6 +38,9 @@ class Creature:
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
 
+        # ID 설정 (ID: health_name_monsternum)
+        self.id = f"{self.health}_{self.name}_{monster_num}"
+
     def draw(self, screen):
         # 크리쳐 그리기
         screen.blit(self.image, self.rect.topleft)
@@ -44,11 +49,17 @@ class Creature:
         # 크리쳐 움직이기 (순수 가상 함수)
         self.rect.topleft = (self.x, self.y)
 
+    def check_condition(self):
+        if cc.is_dead(self):
+            print("뒤졌는데여")
+
     def update(self):
         # 움직이고 점프를 같이 함
         self.move()
+        self.check_condition()
         cmove.jump(self)
 
     def only_jump(self):
         # 플레이어 클래스는 움직임 함수가 따로 있으므로 점프만^^
+        self.check_condition()
         cmove.jump(self)

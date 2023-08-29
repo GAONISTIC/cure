@@ -16,6 +16,6 @@ class WeaponManager:
         for indexWeapon in self.weapons:
             indexWeapon.draw(screen)
 
-    def update_element(self, parent_player):
+    def update_element(self, parent_player, robot_manager):
         for indexWeapon in self.weapons:
-            indexWeapon.update(parent_player)
+            indexWeapon.update(parent_player, robot_manager)

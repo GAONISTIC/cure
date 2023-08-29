@@ -19,3 +19,4 @@ class Robot(Creature):
     def update(self, p1):
         self.move(p1)
         # 점프는 굳이 확인할 필요가 없다
+        super().check_condition()
