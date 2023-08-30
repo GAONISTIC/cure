@@ -22,6 +22,8 @@ from mweapon.weapon_manager import WeaponManager
 
 from mscreen.screen import Screen
 
+from mweapon.gravity.gravity import GravityAttack
+
 mf.start_game()
 temp = Player(
     name="aa",
@@ -70,6 +72,8 @@ natemp = CreatureNameBar(rtemp)
 
 aitemp = CreatureAttackIcon("b1", temp)
 
+gctemp = GravityAttack(540, 270, 100)
+
 pm = PlayerManager()
 pm.add_element(temp)
 rm = RobotManager()
@@ -82,6 +86,10 @@ him.add_element(hitemp)
 him.add_element(rhitemp)
 nam = CreatureNameBarManager()
 nam.add_element(natemp)
+
+gctemp.append_creatures(temp)
+
+print(temp.x, temp.y)
 
 while ms.running:
     mf.is_QUIT()
@@ -99,6 +107,8 @@ while ms.running:
     him.draw_element(ms.screen)
     nam.update_element()
     nam.draw_element(ms.screen)
+
+    gctemp.draw(ms.screen)
 
     mf.update(ms.screen)
 
