@@ -60,8 +60,8 @@ rtemp = Robot(
     speed=10,
     width=100,
     height=100,
-    x=540,
-    y=270,
+    x=800,
+    y=400,
     jumpSize=3
 )
 ms.monster_num += 1
@@ -73,6 +73,8 @@ natemp = CreatureNameBar(rtemp)
 aitemp = CreatureAttackIcon("b1", temp)
 
 gctemp = GravityAttack(540, 270, 100)
+
+temp.set_gravity(gctemp)
 
 pm = PlayerManager()
 pm.add_element(temp)
@@ -87,9 +89,7 @@ him.add_element(rhitemp)
 nam = CreatureNameBarManager()
 nam.add_element(natemp)
 
-gctemp.append_creatures(temp)
-
-print(temp.x, temp.y)
+gctemp.append_creatures(rtemp)
 
 while ms.running:
     mf.is_QUIT()
@@ -101,7 +101,7 @@ while ms.running:
     pm.draw_element(ms.screen)
     wm.update_element(temp, rm)
     wm.draw_element(ms.screen)
-    rm.update_element(temp)
+    rm.update_element()
     rm.draw_element(ms.screen)
     him.update_element()
     him.draw_element(ms.screen)

@@ -1,4 +1,5 @@
 import pygame
+import math
 from mgame_manager.settings import *
 
 class GravityCircle:
@@ -36,6 +37,7 @@ class GravityAttack:
 
     def append_creatures(self, temp_creature):
         if temp_creature.id not in self.creatures_ID:
+
             self.creatures_ID.append(temp_creature.id)
             self.creatures_G.append(self.beginning_G)
             self.ed_creatures.append(temp_creature)
@@ -45,33 +47,75 @@ class GravityAttack:
 
         g.G = G
 
-        if g.x == self.x and g.y == self.y:
+        middle_x = self.x + self.width / 2
+        middle_y = self.y + self.height / 2
+
+        if g.x == middle_x and g.y == middle_y:
             pass
-        elif g.x != self.x:
-            a = (-g.y + self.y) / (g.x - self.x)
-            dx = g.G if self.x <= g.x else -1 * g.G
+        elif g.x != middle_x:
+            a = (-g.y + middle_y) / (g.x - middle_x)
+            dx = g.G if middle_x <= g.x else -1 * g.G
             dy = a * dx
-            if (self.x < g.x and self.x + dx > g.x) or (self.x > g.x and self.x + dx < g.x):
-                self.x = g.x
-                self.y = g.y
+            if (middle_x < g.x and middle_x + dx > g.x) or (middle_x > g.x and middle_x + dx < g.x):
+                middle_x = g.x
+                middle_y = g.y
             else:
-                self.x += dx
-                self.y -= dy
+                middle_x += dx
+                middle_y -= dy
         else:
-            dy = g.G if self.y < g.y else -1 * g.G
-            if (self.y < g.y and self.y + dy > g.y) or (self.y > g.y and self.y + dy < g.y):
-                self.y = g.y
+            dy = g.G if middle_y < g.y else -1 * g.G
+            if (middle_y < g.y and middle_y + dy > g.y) or (middle_y > g.y and middle_y + dy < g.y):
+                middle_y = g.y
             else:
-                self.y += dy
+                middle_y += dy
+
+        self.x  = middle_x - self.width / 2
+        self.y = middle_y - self.height / 2
+
+    def creatures_in_gravity(self, creature):
+        min_x = creature.x
+        max_x = creature.x + creature.width
+
+        min_y = creature.y
+        max_y = creature.y + creature.height
+
+        min_rx = self.x - self.radius
+        max_rx = self.x + self.radius
+
+        min_ry = self.y - self.radius
+        max_ry = self.y + self.radius
+
+        # print(f"min: {min_x, min_y}, max: {max_x, max_y}, rmin: {min_rx, min_ry}, rmax: {max_rx, max_ry}")
+
+        if min_x >= min_rx and max_x <= max_rx and min_y <= max_ry:
+            return True
+        else:
+            return False
 
     def holding_gravity(self):
         for i in range(0, len(self.creatures_G)):
-            self.move_gravity(self.ed_creatures[i], self.creatures_G[i])
+            if self.creatures_in_gravity(self.ed_creatures[i]):
+                self.move_gravity(self.ed_creatures[i], self.creatures_G[i])
     
+    def move(self, theta):
+        # 거리
+        distance = 1
+        
+        # 각도를 라디안으로 변환
+        radians = math.radians(theta)
+
+        # 새로운 x, y 좌표 계산
+        new_x = self.x + distance * math.cos(radians)
+        new_y = self.y + distance * math.sin(radians)
+
+        # 좌표를 업데이트
+        self.x = new_x
+        self.y = new_y
+
+
     def draw(self, screen):
-        GravityCircle(self.x, self.y, self.radius / 1, 128).draw(screen)
-        GravityCircle(self.x, self.y, self.radius / 2, 128).draw(screen)
-        GravityCircle(self.x, self.y, self.radius / 5, 128).draw(screen)
+        for i in range(1, self.radius):
+            GravityCircle(self.x, self.y, i, 15).draw(screen)
 
         self.increase_G()
         self.holding_gravity()

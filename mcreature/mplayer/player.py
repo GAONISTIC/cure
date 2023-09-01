@@ -20,6 +20,9 @@ class Player(Creature):
         self.b1_later_frame = 0
         self.b1_is_attacking = False
 
+    def set_gravity(self, Gravity):
+        self.gravity = Gravity
+
     def move(self, game_screen):
         keys = pygame.key.get_pressed()
 
@@ -73,6 +76,9 @@ class Player(Creature):
         # S2 공격(Super 2)
         if keys[PlayerKey.ATT_S2.value]:
             pattack.S2_ATTACK()
+
+        if keys[PlayerKey.GRV_UP.value]:
+            self.gravity.move(1)
 
         # 깨어진 세계 입장
         if keys[PlayerKey.BROKEN_WORLD.value]:

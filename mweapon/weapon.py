@@ -86,7 +86,8 @@ class Weapon:
             self.is_motioning = False
             self.save_attacked_robot = []
 
-        is_robot_attacked(self, robot_manager)
+        if self.player.b1_is_attacking == True:
+            is_robot_attacked(self, robot_manager)
 
     def update(self, parent_player, robot_manager):
         # 무기 업데이트

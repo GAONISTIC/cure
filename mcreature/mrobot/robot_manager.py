@@ -16,6 +16,6 @@ class RobotManager(CreatureManager):
     def draw_element(self, screen):
         super().draw_element(screen)
 
-    def update_element(self, p1):
+    def update_element(self):
         for indexRobot in self.creatures:
-            indexRobot.update(p1)
+            indexRobot.update()
