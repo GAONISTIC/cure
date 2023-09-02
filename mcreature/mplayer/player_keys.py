@@ -15,7 +15,4 @@ class PlayerKey(Enum):
     ATT_S1 = pygame.K_k
     ATT_S2 = pygame.K_l
 
-    GRV_UP = pygame.K_UP
-    GRV_DW = pygame.K_DOWN
-
     BROKEN_WORLD = pygame.K_SEMICOLON

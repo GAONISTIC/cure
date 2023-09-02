@@ -72,8 +72,7 @@ natemp = CreatureNameBar(rtemp)
 
 aitemp = CreatureAttackIcon("b1", temp)
 
-gctemp = GravityAttack(540, 270, 100)
-
+gctemp = GravityAttack(temp.x + temp.width / 2 + 50, temp.y + temp.height / 2, 100, temp)
 temp.set_gravity(gctemp)
 
 pm = PlayerManager()

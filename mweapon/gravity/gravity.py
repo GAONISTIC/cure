@@ -20,7 +20,7 @@ class GravityCircle:
         screen.blit(transparent_surface, (blit_x, blit_y))
 
 class GravityAttack:
-    def __init__(self, x, y, radius):
+    def __init__(self, x, y, radius, mother_creature):
         self.x = x
         self.y = y
         self.radius = radius
@@ -30,6 +30,10 @@ class GravityAttack:
         self.creatures_ID = []
         self.creatures_G = []
         self.increasing_G = 0.1
+
+        self.mother_creature = mother_creature
+
+        self.R = math.sqrt(pow(self.x - self.mother_creature.x + self.mother_creature.width / 2, 2) + pow(self.y - self.mother_creature.y + self.mother_creature.height / 2, 2))
 
     def increase_G(self):
         for i in range(0, len(self.creatures_G)):
@@ -96,26 +100,63 @@ class GravityAttack:
         for i in range(0, len(self.creatures_G)):
             if self.creatures_in_gravity(self.ed_creatures[i]):
                 self.move_gravity(self.ed_creatures[i], self.creatures_G[i])
-    
+
     def move(self, theta):
-        # 거리
-        distance = 1
-        
-        # 각도를 라디안으로 변환
-        radians = math.radians(theta)
+        p = self.mother_creature.x + self.mother_creature.width / 2
+        q = self.mother_creature.y + self.mother_creature.height / 2
 
-        # 새로운 x, y 좌표 계산
-        new_x = self.x + distance * math.cos(radians)
-        new_y = self.y + distance * math.sin(radians)
+        r = self.x
+        s = self.y
 
-        # 좌표를 업데이트
-        self.x = new_x
-        self.y = new_y
+        # 원의 방정식: (x - p)^2 + (y - q)^2 = (r - p)^2 + (s - q)^2
+        # 저 방정식에 (t, u) 점이 있음
 
+        radius = self.R
+
+        dx = r - p
+        dy = s - q
+
+        radian = math.atan2(dy, dx)  # 아크탄젠트 계산
+        degree = math.degrees(radian)  # 라디안 값을 각도로 변환
+
+        # 각도에 theta를 더하고 다시 라디안으로 변환
+        radian = math.radians(degree + theta)
+
+        # 원의 방정식을 사용하여 새로운 (dx, dy) 좌표 계산
+        dy = math.sin(radian) * radius + q
+        dx = math.cos(radian) * radius + p
+
+        self.x = dx
+        self.y = dy
+
+    def keep_distance(self):
+        p = self.mother_creature.x + self.mother_creature.width / 2
+        q = self.mother_creature.y + self.mother_creature.height / 2
+
+        r = self.x
+        s = self.y
+
+        radius = self.R
+
+        dx = r - p
+        dy = s - q
+
+        radian = math.atan2(dy, dx)  # 아크탄젠트 계산
+        degree = math.degrees(radian)  # 라디안 값을 각도로 변환
+
+        # 각도에 theta를 더하고 다시 라디안으로 변환
+        radian = math.radians(degree)
+
+        dx = math.cos(radian) * radius + p
+        dy = math.sin(radian) * radius + q
+
+        self.x = dx
+        self.y = dy
 
     def draw(self, screen):
         for i in range(1, self.radius):
             GravityCircle(self.x, self.y, i, 15).draw(screen)
-
+        
         self.increase_G()
         self.holding_gravity()
+        self.keep_distance()
