@@ -1,16 +1,16 @@
 # 플레이어 공격 함수 모음
 
 def B1_ATTACK():
-    print("B1_ATTACK")
+    pass
 
 def B2_ATTACK():
-    print("B2_ATTACK")
+    pass
 
 def CM_ATTACK():
-    print("CM_ATTACK")
+    pass
 
 def S1_ATTACK():
-    print("S1_ATTACK")
+    pass
 
 def S2_ATTACK():
-    print("S2_ATTACK")
+    pass

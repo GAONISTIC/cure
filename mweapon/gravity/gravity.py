@@ -35,6 +35,8 @@ class GravityAttack:
 
         self.R = math.sqrt(pow(self.x - self.mother_creature.x + self.mother_creature.width / 2, 2) + pow(self.y - self.mother_creature.y + self.mother_creature.height / 2, 2))
 
+        self.shooting = False
+
     def increase_G(self):
         for i in range(0, len(self.creatures_G)):
             self.creatures_G[i] += self.increasing_G
@@ -153,10 +155,29 @@ class GravityAttack:
         self.x = dx
         self.y = dy
 
+    def move_forward(self):
+        move_value = 10
+
+        middle_x = self.mother_creature.x + self.mother_creature.width / 2
+        middle_y = self.mother_creature.y + self.mother_creature.height / 2
+
+        a = (-self.y + middle_y) / (self.x - middle_x)
+        
+        print(a)
+        
+        dx = move_value if self.x >= middle_x else -1 * move_value
+        dy = a * dx
+
+        self.x += dx
+        self.y -= dy
+
+        self.shooting = False
+
     def draw(self, screen):
         for i in range(1, self.radius):
             GravityCircle(self.x, self.y, i, 15).draw(screen)
         
         self.increase_G()
         self.holding_gravity()
-        self.keep_distance()
+        if not self.shooting:
+            self.keep_distance()

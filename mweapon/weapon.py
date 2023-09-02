@@ -58,19 +58,19 @@ class Weapon:
             
         # B2 공격
         if keys[WeaponKey.ATT_B2.value]:
-            print("B2ATTACK WITH WEAPON")
+            pass
             
         # CM 공격
         if keys[WeaponKey.ATT_CM.value]:
-            print("CMATTACK WITH WEAPON")
+            pass
             
         # S1 공격
         if keys[WeaponKey.ATT_S1.value]:
-            print("S1ATTACK WITH WEAPON")
+            pass
             
         # S2 공격
         if keys[WeaponKey.ATT_S2.value]:
-            print("S2ATTACK WITH WEAPON")
+            pass
 
         # 움직임 관리
         wmotion.checking_motion(self)

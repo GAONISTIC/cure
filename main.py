@@ -90,7 +90,7 @@ nam.add_element(natemp)
 
 gctemp.append_creatures(rtemp)
 
-while ms.running:
+while ms.running: 
     mf.is_QUIT()
 
     game_screen.screen_fill_bg(ms.screen)
