@@ -64,12 +64,11 @@ class Player(Creature):
         # B2 공격(Basic 2)
         if keys[PlayerKey.ATT_B2.value]:
             pattack.B2_ATTACK()
+            self.gravity.begin_shooting()
 
         # CM 공격(COMBO)
         if keys[PlayerKey.ATT_CM.value]:
             pattack.CM_ATTACK()
-            self.gravity.move_forward()
-            self.gravity.shooting = True
 
         # S1 공격(Super 1)
         if keys[PlayerKey.ATT_S1.value]:

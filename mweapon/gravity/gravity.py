@@ -1,6 +1,6 @@
 import pygame
 import math
-from mgame_manager.settings import *
+import mgame_manager.settings as ms
 
 class GravityCircle:
     def __init__(self, x, y, radius, ALPHA):
@@ -11,7 +11,7 @@ class GravityCircle:
         
     def draw(self, screen):
         transparent_surface = pygame.Surface((self.radius * 2, self.radius * 2), pygame.SRCALPHA)
-        pygame.draw.circle(transparent_surface, (BLACK[0], BLACK[1], BLACK[2], self.ALPHA), (self.radius, self.radius), self.radius)
+        pygame.draw.circle(transparent_surface, (ms.BLACK[0], ms.BLACK[1], ms.BLACK[2], self.ALPHA), (self.radius, self.radius), self.radius)
 
         # 중앙에 그리기 위한 좌표 계산
         blit_x = self.x - self.radius
@@ -35,7 +35,14 @@ class GravityAttack:
 
         self.R = math.sqrt(pow(self.x - self.mother_creature.x + self.mother_creature.width / 2, 2) + pow(self.y - self.mother_creature.y + self.mother_creature.height / 2, 2))
 
-        self.shooting = False
+        self.is_shooting = False
+        self.max_distance = 500
+        self.per_distance = 50
+        self.gap_distance = -1
+
+        self.stop = False
+        self.start_stop_frame = -1972
+        self.gap_stop_frame = 120
 
     def increase_G(self):
         for i in range(0, len(self.creatures_G)):
@@ -104,6 +111,8 @@ class GravityAttack:
                 self.move_gravity(self.ed_creatures[i], self.creatures_G[i])
 
     def move(self, theta):
+        if self.stop or self.is_shooting:
+            return
         p = self.mother_creature.x + self.mother_creature.width / 2
         q = self.mother_creature.y + self.mother_creature.height / 2
 
@@ -113,7 +122,7 @@ class GravityAttack:
         # 원의 방정식: (x - p)^2 + (y - q)^2 = (r - p)^2 + (s - q)^2
         # 저 방정식에 (t, u) 점이 있음
 
-        radius = self.R
+        radius = math.sqrt(pow(r - p, 2) + pow(s - q, 2))
 
         dx = r - p
         dy = s - q
@@ -132,13 +141,15 @@ class GravityAttack:
         self.y = dy
 
     def keep_distance(self):
+        if self.is_shooting:
+            return
         p = self.mother_creature.x + self.mother_creature.width / 2
         q = self.mother_creature.y + self.mother_creature.height / 2
 
         r = self.x
         s = self.y
 
-        radius = self.R
+        radius = int(self.R / 2 if self.is_shooting else self.R / 2)
 
         dx = r - p
         dy = s - q
@@ -148,6 +159,7 @@ class GravityAttack:
 
         # 각도에 theta를 더하고 다시 라디안으로 변환
         radian = math.radians(degree)
+        print(radian)
 
         dx = math.cos(radian) * radius + p
         dy = math.sin(radian) * radius + q
@@ -155,8 +167,8 @@ class GravityAttack:
         self.x = dx
         self.y = dy
 
-    def move_forward(self):
-        move_value = 10
+    def move_forward(self, move_value):
+        move_value = move_value
 
         middle_x = self.mother_creature.x + self.mother_creature.width / 2
         middle_y = self.mother_creature.y + self.mother_creature.height / 2
@@ -168,16 +180,58 @@ class GravityAttack:
         dx = move_value if self.x >= middle_x else -1 * move_value
         dy = a * dx
 
+        const_x = self.x
+        const_y = self.y
+
         self.x += dx
         self.y -= dy
 
-        self.shooting = False
+        if self.check_out_of_range():
+            self.x = const_x
+            self.y = const_y
+
+    def begin_shooting(self):
+        if self.is_shooting == True:
+            return
+        self.is_shooting = True
+
+        self.gap_distance = self.per_distance
+
+    def checking_shooting(self):
+        if self.gap_distance == 0:
+            self.start_stop_frame = ms.frame_count
+        
+        if self.gap_distance < 0:
+            self.is_shooting = False
+            return
+        self.move_forward(self.max_distance / self.per_distance)
+        self.gap_distance -= 1
+
+    def checking_stop(self):
+        if ms.frame_count - self.start_stop_frame <= self.gap_stop_frame:
+            self.stop = True
+        else:
+            self.stop = False
+            self.move_end = False
+
+    def check_out_of_range(self):
+        if self.x < 0 or self.x >= ms.screen.get_width() or self.y < 0 or self.y >= ms.screen.get_height():
+            return True
+        return False
 
     def draw(self, screen):
+        ALPHA = 10 if self.is_shooting else 3
+        self.radius = int(self.R / 2 if self.is_shooting else self.R / 4)
         for i in range(1, self.radius):
-            GravityCircle(self.x, self.y, i, 15).draw(screen)
+            GravityCircle(self.x, self.y, i, ALPHA).draw(screen)
         
         self.increase_G()
         self.holding_gravity()
-        if not self.shooting:
-            self.keep_distance()
+
+        if not self.stop:
+            if not self.is_shooting:
+                self.keep_distance()
+
+            self.checking_shooting()
+
+        self.checking_stop()
